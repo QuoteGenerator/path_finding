@@ -2,7 +2,7 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 const startButton = document.getElementById("startButton");
-startButton.addEventListener("click", startDFS());
+startButton.addEventListener("click", startDFS);
 
 let boxesArray = [];
 
@@ -61,5 +61,5 @@ function drawEndPoint(){
 }
 
 function startDFS(){
-    
+    startButton.remove();
 }
