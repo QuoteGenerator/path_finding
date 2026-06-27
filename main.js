@@ -2,7 +2,6 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 const startButton = document.getElementById("startButton");
-startButton.addEventListener("click", startDFS);
 
 let boxesArray = [];
 
@@ -15,6 +14,12 @@ let boxHeight = 30;
 let startingPoint = 0;
 let endPoint = 0;
 
+startButton.addEventListener("click", () => {
+        startDFS(startingPoint);
+    }
+);
+
+
 canvas.width = boxWidth * columnAmount;
 canvas.height = boxHeight * rowAmount;
 
@@ -25,6 +30,7 @@ class Box {
     constructor(givenXPos, givenYPos){
         this.xPos = givenXPos;
         this.yPos = givenYPos;
+        this.alreadyLooked = false;
     }
 }
 
@@ -60,6 +66,15 @@ function drawEndPoint(){
     ctx.fillRect(endPoint.xPos, endPoint.yPos, boxWidth, boxHeight);
 }
 
-function startDFS(){
+function startDFS(givenBox){
     startButton.remove();
+
+    if(givenBox.alreadyLooked == true){return;}
+    if(!(givenBox.xPos == endPoint.xPos && givenBox.yPos == endPoint.yPos)){
+        ctx.fillStyle = "black";
+        ctx.fillRect(givenBox.xPos, givenBox.yPos, boxWidth, boxHeight);
+        setTimeout({
+            //für alle nachbar diese funktion rekursiv ausführen
+        }, 1000);
+    }
 }
