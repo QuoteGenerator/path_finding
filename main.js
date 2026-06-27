@@ -1,10 +1,21 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 300;
-canvas.height = 300;
+
 
 let boxesArray = [];
+
+let rowAmount = 10;
+let columnAmount = 10;
+
+let boxWidth = 30;
+let boxHeight = 30;
+
+canvas.width = boxWidth * columnAmount;
+canvas.height = boxHeight * rowAmount;
+
+canvas.style.height = `${boxHeight*rowAmount}px`;
+canvas.style.width = `${boxWidth*columnAmount}px`;
 
 class Box {
     constructor(givenXPos, givenYPos){
@@ -13,15 +24,17 @@ class Box {
     }
 }
 
-for(let i = 0; i < 30; i++){
-    for(let j = 0; j < 30; j++){
-        let box = new Box(i*10,j*10);
+for(let i = 0; i < columnAmount; i++){
+    for(let j = 0; j < rowAmount; j++){
+        let box = new Box(i*boxWidth,j*boxHeight);
         boxesArray.push(box);
     }
 }
 
 for(let i = 0; i < boxesArray.length; i++){
     ctx.beginPath();
-    ctx.rect(boxesArray[i].xPos, boxesArray[i].yPos, 30, 30);
+    ctx.strokeStyle = "black";
+    ctx.rect(boxesArray[i].xPos, boxesArray[i].yPos, boxWidth, boxHeight);
+    
     ctx.stroke();
 }
