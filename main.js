@@ -16,6 +16,7 @@ let endPoint = 0;
 
 startButton.addEventListener("click", () => {
         startDFS(startingPoint);
+        startButton.remove();   
     }
 );
 
@@ -67,8 +68,6 @@ function drawEndPoint(){
 }
 
 function startDFS(givenBox){
-    startButton.remove();
-
     if(givenBox.alreadyLooked == true){return;}
     if(!(givenBox.xPos == endPoint.xPos && givenBox.yPos == endPoint.yPos)){
         ctx.fillStyle = "black";
