@@ -7,14 +7,16 @@ const startButton = document.getElementById("startButton");
 let boxesArray = [];
 
 
-let rowAmount = 10;
-let columnAmount = 10;
+let rowAmount = 20;
+let columnAmount = 20;
 
 let boxWidth = 30;
 let boxHeight = 30;
 
 let startingPoint = 0;
 let endPoint = 0;
+
+let speed = 100;
 
 startButton.addEventListener("click", () => {
         startDFS(startingPoint, []);
@@ -127,7 +129,7 @@ function startDFS(givenBox, pathArray){
             if(neighbor6 != undefined){startDFS(neighbor6, [...pathArray]);}
             if(neighbor7 != undefined){startDFS(neighbor7, [...pathArray]);}
             if(neighbor8 != undefined){startDFS(neighbor8, [...pathArray]);}
-        }, 500);
+        }, speed);
     }
 }
 
