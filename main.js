@@ -23,7 +23,6 @@ startButton.addEventListener("click", () => {
 
 canvas.width = boxWidth * columnAmount;
 canvas.height = boxHeight * rowAmount;
-
 canvas.style.height = `${boxHeight*rowAmount}px`;
 canvas.style.width = `${boxWidth*columnAmount}px`;
 
@@ -73,21 +72,34 @@ function drawStartingPoint(){
     startingPoint = boxesArray[Math.floor(Math.random() * boxesArray.length)];
     ctx.fillStyle = "blue";
     ctx.fillRect(startingPoint.xPos, startingPoint.yPos, boxWidth, boxHeight);
+    startingPoint.color = "blue";
+    startingPoint.exists = true;
 }
 
 drawEndPoint();
 function drawEndPoint(){
     endPoint = boxesArray[Math.floor(Math.random() * boxesArray.length)];
     ctx.fillStyle = "red";
+    endPoint.exists = true;
+    endPoint.color = "red";
+
     while(startingPoint == endPoint){
         endPoint = boxesArray[Math.floor(Math.random() * boxesArray.length)];
     }
+
     ctx.fillRect(endPoint.xPos, endPoint.yPos, boxWidth, boxHeight);
 }
 
+let foundAllRedBoxes = false;
+
 function startDFS(givenBox){
+    console.log(foundAllRedBoxes);
+    if(foundAllRedBoxes == true){return;}
     if(givenBox.exists == false){return;}
     if(givenBox.alreadyLooked == true){return;}
+    if(givenBox.color == "red"){foundAllRedBoxes = true;}
+    
+
     if(!(givenBox.xPos == endPoint.xPos && givenBox.yPos == endPoint.yPos)){
         ctx.fillStyle = givenBox.color;
         ctx.fillRect(givenBox.xPos, givenBox.yPos, boxWidth, boxHeight);
@@ -110,6 +122,6 @@ function startDFS(givenBox){
             if(neighbor6 != undefined){startDFS(neighbor6);}
             if(neighbor7 != undefined){startDFS(neighbor7);}
             if(neighbor8 != undefined){startDFS(neighbor8);}
-        }, 1000);
+        }, 500);
     }
 }
