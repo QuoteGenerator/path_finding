@@ -1,9 +1,11 @@
+
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 const startButton = document.getElementById("startButton");
 
 let boxesArray = [];
+
 
 let rowAmount = 10;
 let columnAmount = 10;
@@ -15,7 +17,7 @@ let startingPoint = 0;
 let endPoint = 0;
 
 startButton.addEventListener("click", () => {
-        startDFS(startingPoint);
+        startDFS(startingPoint, []);
         startButton.remove();   
     }
 );
@@ -92,12 +94,15 @@ function drawEndPoint(){
 
 let foundAllRedBoxes = false;
 
-function startDFS(givenBox){
+function startDFS(givenBox, pathArray){
+    
     console.log(foundAllRedBoxes);
     if(foundAllRedBoxes == true){return;}
     if(givenBox.exists == false){return;}
     if(givenBox.alreadyLooked == true){return;}
-    if(givenBox.color == "red"){foundAllRedBoxes = true;}
+    pathArray.push(givenBox);
+    if(givenBox.color == "red"){foundAllRedBoxes = true; drawPath(pathArray); return}
+
     
 
     if(!(givenBox.xPos == endPoint.xPos && givenBox.yPos == endPoint.yPos)){
@@ -114,14 +119,25 @@ function startDFS(givenBox){
         givenBox.alreadyLooked = true;
 
         setTimeout( () => {
-            if(neighbor1 != undefined){startDFS(neighbor1);}
-            if(neighbor2 != undefined){startDFS(neighbor2);}
-            if(neighbor3 != undefined){startDFS(neighbor3);}
-            if(neighbor4 != undefined){startDFS(neighbor4);}
-            if(neighbor5 != undefined){startDFS(neighbor5);}
-            if(neighbor6 != undefined){startDFS(neighbor6);}
-            if(neighbor7 != undefined){startDFS(neighbor7);}
-            if(neighbor8 != undefined){startDFS(neighbor8);}
+            if(neighbor1 != undefined){startDFS(neighbor1, [...pathArray]);}
+            if(neighbor2 != undefined){startDFS(neighbor2, [...pathArray]);}
+            if(neighbor3 != undefined){startDFS(neighbor3, [...pathArray]);}
+            if(neighbor4 != undefined){startDFS(neighbor4, [...pathArray]);}
+            if(neighbor5 != undefined){startDFS(neighbor5, [...pathArray]);}
+            if(neighbor6 != undefined){startDFS(neighbor6, [...pathArray]);}
+            if(neighbor7 != undefined){startDFS(neighbor7, [...pathArray]);}
+            if(neighbor8 != undefined){startDFS(neighbor8, [...pathArray]);}
         }, 500);
     }
+}
+
+let pathIndex = 0;
+function drawPath(path){
+    if(path[pathIndex] == undefined){return;}
+    setTimeout(()=>{
+            ctx.fillStyle="green";
+            ctx.fillRect(path[pathIndex].xPos, path[pathIndex].yPos, boxWidth, boxHeight);
+            pathIndex++;
+            drawPath(path);
+    }, 100);
 }
