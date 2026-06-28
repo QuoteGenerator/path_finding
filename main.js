@@ -28,32 +28,50 @@ canvas.style.height = `${boxHeight*rowAmount}px`;
 canvas.style.width = `${boxWidth*columnAmount}px`;
 
 class Box {
-    constructor(givenXPos, givenYPos){
+    constructor(givenXPos, givenYPos, givenExists, givenColor){
         this.xPos = givenXPos;
         this.yPos = givenYPos;
         this.alreadyLooked = false;
+        this.exists = givenExists;
+        this.color = givenColor;
     }
 }
 
-for(let i = 0; i < columnAmount; i++){
-    for(let j = 0; j < rowAmount; j++){
-        let box = new Box(i*boxWidth,j*boxHeight);
-        boxesArray.push(box);
+createBoxes();
+function createBoxes() {
+    let box;
+    for(let i = 0; i < columnAmount; i++){
+        for(let j = 0; j < rowAmount; j++){
+            if(Math.random() * 10 > 5){
+                box = new Box(i*boxWidth,j*boxHeight, true, "blue");
+            } else {
+                box = new Box(i*boxWidth,j*boxHeight, false, "black");
+            }
+            boxesArray.push(box);
+        }
     }
 }
 
-for(let i = 0; i < boxesArray.length; i++){
-    ctx.beginPath();
-    ctx.strokeStyle = "black";
-    ctx.rect(boxesArray[i].xPos, boxesArray[i].yPos, boxWidth, boxHeight);
-    
-    ctx.stroke();
+drawBoxes();
+function drawBoxes(){
+    for(let i = 0; i < boxesArray.length; i++){
+        ctx.beginPath();
+        if(boxesArray[i].exists == true){
+            ctx.strokeStyle = "black";
+            ctx.rect(boxesArray[i].xPos, boxesArray[i].yPos, boxWidth, boxHeight);
+            ctx.stroke();
+        } else {
+            ctx.fillStyle = "black";
+            ctx.fillRect(boxesArray[i].xPos, boxesArray[i].yPos, boxWidth, boxHeight);
+        }
+        
+    }
 }
 
 drawStartingPoint();
 function drawStartingPoint(){
     startingPoint = boxesArray[Math.floor(Math.random() * boxesArray.length)];
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "blue";
     ctx.fillRect(startingPoint.xPos, startingPoint.yPos, boxWidth, boxHeight);
 }
 
@@ -68,12 +86,30 @@ function drawEndPoint(){
 }
 
 function startDFS(givenBox){
+    if(givenBox.exists == false){return;}
     if(givenBox.alreadyLooked == true){return;}
     if(!(givenBox.xPos == endPoint.xPos && givenBox.yPos == endPoint.yPos)){
-        ctx.fillStyle = "black";
+        ctx.fillStyle = givenBox.color;
         ctx.fillRect(givenBox.xPos, givenBox.yPos, boxWidth, boxHeight);
-        setTimeout({
-            //für alle nachbar diese funktion rekursiv ausführen
+        let neighbor1 = boxesArray.find((box) => box.xPos == (givenBox.xPos-boxWidth) && box.yPos == givenBox.yPos);
+        let neighbor2 = boxesArray.find((box) => box.xPos == (givenBox.xPos+boxWidth) && box.yPos == givenBox.yPos);
+        let neighbor3 = boxesArray.find((box) => box.xPos == givenBox.xPos && box.yPos == (givenBox.yPos-boxHeight));
+        let neighbor4 = boxesArray.find((box) => box.xPos == givenBox.xPos && box.yPos == (givenBox.yPos+boxHeight));
+        let neighbor5 = boxesArray.find((box) => box.xPos == (givenBox.xPos+boxWidth) && box.yPos == (givenBox.yPos+boxHeight));
+        let neighbor6 = boxesArray.find((box) => box.xPos == (givenBox.xPos-boxWidth) && box.yPos == (givenBox.yPos-boxHeight));
+        let neighbor7 = boxesArray.find((box) => box.xPos == (givenBox.xPos+boxWidth) && box.yPos == (givenBox.yPos-boxHeight));
+        let neighbor8 = boxesArray.find((box) => box.xPos == (givenBox.xPos-boxWidth) && box.yPos == (givenBox.yPos+boxHeight));
+        givenBox.alreadyLooked = true;
+
+        setTimeout( () => {
+            if(neighbor1 != undefined){startDFS(neighbor1);}
+            if(neighbor2 != undefined){startDFS(neighbor2);}
+            if(neighbor3 != undefined){startDFS(neighbor3);}
+            if(neighbor4 != undefined){startDFS(neighbor4);}
+            if(neighbor5 != undefined){startDFS(neighbor5);}
+            if(neighbor6 != undefined){startDFS(neighbor6);}
+            if(neighbor7 != undefined){startDFS(neighbor7);}
+            if(neighbor8 != undefined){startDFS(neighbor8);}
         }, 1000);
     }
 }
